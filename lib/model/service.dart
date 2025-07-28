@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../functions/email_verifu.dart';
 import '../service/service_card.dart';
 
 class Service {
@@ -15,11 +17,19 @@ class ServiceCard{
   static Widget card(double w, Service service,BuildContext context){
      return InkWell(
        onTap: (){
-         Navigator.push(
-           context,
-           MaterialPageRoute( builder: (context) =>  FillForm(service: service,),
-           ),
-         );
+         if(FirebaseAuth.instance.currentUser!.emailVerified){
+           Navigator.push(
+             context,
+             MaterialPageRoute( builder: (context) =>  FillForm(service: service,),
+             ),
+           );
+         }else{
+           Navigator.push(
+             context,
+             MaterialPageRoute( builder: (context) =>  EmailVerifu(),
+             ),
+           );
+         }
        },
        child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5.0),
@@ -47,11 +57,14 @@ class ServiceCard{
   static Widget cards(double w, Service service,BuildContext context){
     return InkWell(
       onTap: (){
-        Navigator.push(
-          context,
-          MaterialPageRoute( builder: (context) =>  FillForm(service: service,),
-          ),
-        );
+
+          Navigator.push(
+            context,
+            MaterialPageRoute( builder: (context) =>  FillForm(service: service,),
+            ),
+          );
+
+
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5.0),

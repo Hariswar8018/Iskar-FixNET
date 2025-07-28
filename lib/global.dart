@@ -3,10 +3,14 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iskar/first/onboarding.dart';
+import 'package:iskar/main_navigations/services.dart';
+import 'package:iskar/second_pages/my_profile.dart';
+import 'package:iskar/second_pages/refer.dart' show Refer;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'functions/flush.dart';
+import 'main_navigations/applications.dart';
 
 class Global {
 
@@ -62,7 +66,6 @@ class Global {
                   r(Colors.blue),
                   r(Colors.green),
                   Spacer(),
-                  Icon(Icons.search,color: Colors.grey,size: 25,),
                   SizedBox(width: 13,),
                 ],
               ),
@@ -83,55 +86,41 @@ class Global {
                   ),
                   Text(" Iskar InfoTech",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 21),),
                   Text(" v 1.0.0",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.grey,fontSize: 9),),
-
                 ],
               ),
+              SizedBox(height: 3,),
+              Text("     Powered by Br Nr Innovations",style: TextStyle(fontWeight: FontWeight.w500,color: Colors.grey,fontSize: 10),),
               SizedBox(height: 5,),
-              ty("Basic Functions"),
+
+
+              ty("App Function"),
               InkWell(
                 onTap: () async {
-                  final Uri _url = Uri.parse('https://ayusdev.xyz/');
-                  if (!await launchUrl(_url)) {
-                    throw Exception('Could not launch $_url');
-                  }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Applications(shows: true,)),
+                  );
                 },
-                child:    p(Icon(Icons.language, color: Colors.black, size: 28,),"Our Website"),
-              ),
-              InkWell(
-                onTap: (){
-                  Navigator.pop(context);
-                  Send.message(context, "Will function next Time", false);
-                },
-                child:  p(Icon(Icons.translate, color: Colors.black, size: 28,),"Change Language"),
+                child: p(Icon(Icons.home_work_rounded, color: Colors.black, size: 28,),"Our Services"),
               ),
               InkWell(
                 onTap: () async {
-                  final Uri _url = Uri.parse('https://snl.starwish.fun');
-                  if (!await launchUrl(_url)) {
-                    throw Exception('Could not launch $_url');
-                  }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Services(shows: true, searchable: '',)),
+                  );
                 },
-                child: p(Icon(Icons.info, color: Colors.black, size: 28,),"Info"),
+                child:  p(Icon(Icons.menu, color: Colors.black, size: 28,),"Bookings"),
               ),
               InkWell(
                 onTap: () async {
-                  final Uri _url = Uri.parse('https://wa.me/917000994158');
-                  if (!await launchUrl(_url)) {
-                    throw Exception('Could not launch $_url');
-                  }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyProfile()),
+                  );
                 },
-                child:  p(Icon(Icons.support, color: Colors.black, size: 28,),"Contact Us") ,
+                child:  p(Icon(Icons.person, color: Colors.black, size: 28,),"My Profile"),
               ),
-              InkWell(
-                onTap: () async {
-                  final Uri _url = Uri.parse('https://wa.me/917978097489');
-                  if (!await launchUrl(_url)) {
-                    throw Exception('Could not launch $_url');
-                  }
-                },
-                child:  p(Icon(Icons.support_agent, color: Colors.green, size: 28,),"Developer Support") ,
-              ),
-              ty("Login Function"),
               InkWell(
                 onTap: () async {
                   await FirebaseAuth.instance.signOut();
@@ -148,47 +137,72 @@ class Global {
                 },
                 child:  p(Icon(Icons.logout, color: Colors.red, size: 28,),"Log Out"),
               ),
+              SizedBox(height: 5,),
+              ty("About Us"),
               InkWell(
                 onTap: () async {
-                  final Uri _url = Uri.parse('https://starwish.fun/privacy-policy-for-studio-next-light/');
+                  final Uri _url = Uri.parse('https://iskargreenhomes.com/');
                   if (!await launchUrl(_url)) {
                     throw Exception('Could not launch $_url');
                   }
                 },
-                child: p(Icon(Icons.privacy_tip, color: Colors.black, size: 28,),"Privacy Policy"),
+                child:    p(Icon(Icons.language, color: Colors.black, size: 28,),"Our Website"),
               ),
               InkWell(
                 onTap: () async {
-                  final Uri _url = Uri.parse('https://snl.starwish.fun/delete-account/');
+                  final Uri _url = Uri.parse('https://iskargreenhomes.com/contact-us/');
                   if (!await launchUrl(_url)) {
                     throw Exception('Could not launch $_url');
                   }
                 },
-                child:  p(Icon(Icons.delete, color: Colors.black, size: 28,),"Delete Account"),
+                child:  p(Icon(Icons.map, color: Colors.deepPurple, size: 28,),"Contact Us"),
               ),
               InkWell(
                 onTap: () async {
-                  final Uri _url = Uri.parse('https://snl.starwish.fun/close-account/');
+                  final Uri _url = Uri.parse('https://iskargreenhomes.com/about-us/');
                   if (!await launchUrl(_url)) {
                     throw Exception('Could not launch $_url');
                   }
                 },
-                child:  p(Icon(Icons.close_rounded, color: Colors.black, size: 28,),"Close Account"),
+                child: p(Icon(Icons.info, color: Colors.orange, size: 28,),"About Us"),
               ),
-              SizedBox(height: 25,),
+              InkWell(
+                onTap: () async {
+                  final Uri _url = Uri.parse('tel:8848371829');
+                  if (!await launchUrl(_url)) {
+                    throw Exception('Could not launch $_url');
+                  }
+                },
+                child:  p(Icon(Icons.call, color: Colors.blue, size: 28,),"Call Us") ,
+              ),
+              InkWell(
+                onTap: () async {
+                  final Uri _url = Uri.parse('mailto:info@iskargreenhomes.com');
+                  if (!await launchUrl(_url)) {
+                    throw Exception('Could not launch $_url');
+                  }
+                },
+                child:  p(Icon(Icons.email, color: Colors.red, size: 28,),"Email Us") ,
+              ),
+              InkWell(
+                onTap: () async {
+                  final Uri _url = Uri.parse('https://wa.me/918848371829');
+                  if (!await launchUrl(_url)) {
+                    throw Exception('Could not launch $_url');
+                  }
+                },
+                child:  p(Icon(Icons.waving_hand, color: Colors.green, size: 28,),"Whatsapp Us") ,
+              ),
+              ty("Social Networks"),
               InkWell(
                 onTap: ()async{
-
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Refer()),
+                  );
                 },
                 child:p(Icon(Icons.share, color: Colors.black, size: 28,),"Share App"),
               ),
-              InkWell(
-                onTap: () async {
-
-                },
-                child:  p(Icon(Icons.feedback, color: Colors.black, size: 28,),"Feedback"),
-              ),
-              ty("Social Networks"),
               SizedBox(height: 30,),
             ],
           ),

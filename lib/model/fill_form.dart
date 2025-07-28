@@ -18,12 +18,18 @@ class FillFormModel {
     required this.bio,
     required this.doc,
     required this.paid,
+    required this.customerId,
+    required this.customerName,
+    required this.customerPic,
+    required this.status,
+    required this.sheduledate
   });
 
   late final String name;
   late final String id;
   late final String email;
   late final String phone;
+  late final String status;
   late final String address1;
   late final String address2;
   late final String pincode;
@@ -36,9 +42,16 @@ class FillFormModel {
   late final String bio;
   late final String doc;
   late final bool paid;
+  late final String customerId;
+  late final String customerName;
+  late final String customerPic;
+
+  late final String sheduledate;
 
   FillFormModel.fromJson(Map<String, dynamic> json) {
     name = json['name'] ?? '';
+    sheduledate=json['sheduledate']??'';
+    status = json['status']??'';
     id = json['id'] ?? '';
     email = json['email'] ?? '';
     phone = json['phone'] ?? '';
@@ -54,11 +67,15 @@ class FillFormModel {
     bio = json['bio'] ?? '';
     doc = json['doc'] ?? '';
     paid = json['paid'] ?? false;
+    customerId = json['customerId'] ?? '';
+    customerName = json['customerName'] ?? '';
+    customerPic = json['customerPic'] ?? '';
   }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['name'] = name;
+    data['sheduledate']=sheduledate;
     data['id'] = id;
     data['email'] = email;
     data['phone'] = phone;
@@ -74,6 +91,10 @@ class FillFormModel {
     data['bio'] = bio;
     data['doc'] = doc;
     data['paid'] = paid;
+    data['customerId'] = customerId;
+    data['customerName'] = customerName;
+    data['customerPic'] = customerPic;
+    data['status']=status;
     return data;
   }
 
@@ -82,3 +103,4 @@ class FillFormModel {
     return FillFormModel.fromJson(snapshot);
   }
 }
+

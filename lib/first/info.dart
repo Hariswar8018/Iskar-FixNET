@@ -15,8 +15,8 @@ import '../model/usermodel.dart' show UserModel;
 
 
 class Step1 extends StatefulWidget {
-  String strr;String source;
-   Step1({super.key,required this.strr,this.source=""});
+
+   Step1({super.key,});
 
   @override
   State<Step1> createState() => _Step1State();
@@ -116,34 +116,8 @@ class _Step1State extends State<Step1> {
                   Email: hu,
                   Name: name.text,
                   uid: h,
-                  bday: bday.text,
-                  education: education.text,
-                  gender: gen,
-                  empid: "",
-                  address: phone.text,
-                  country: " ",
-                  state: "",
                   pic: pic,
-                  lastlogin: " ",
-                  online: false,
-                  employee: [],
-                  following: [],
-                  pan: "",
-                  adhaar: adhaar.text,
-                  bio: bio.text,
-                  reporting: "",
-                  location: "",
-                  role: "${widget.strr}",
-                  status: "",
-                  type: "${widget.strr}",
-                  source: widget.source,
-                  joiningd: "",
-                  exp: "",
-                  totalexp: "",
-                  identity: "", resumelink: '', resumetime: 9,
-                  link1: '', link2: '', link3: '', shit: '', salary: 0,
-                  meetlink: '', meetname: '', meetid: '', meetby: '',
-                  meetpic: '', meetdesc: '', bankname: '', bankaccount: '', bankaccountname: '', upiname: '', ifsccode: ''
+                  bio: bio.text, lastLogin: '', token: '', phone: '', dob: '',
               );
               print("haan be");
               try{

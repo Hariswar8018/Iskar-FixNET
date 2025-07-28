@@ -2,11 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iskar/first/onboarding.dart';
+import 'package:iskar/main_navigations/applications.dart';
+import 'package:iskar/main_navigations/services.dart';
+import 'package:iskar/second_pages/refer.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../model/usermodel.dart';
 import '../providers/declare.dart';
+import '../second_pages/my_profile.dart';
 
 class Rewards extends StatelessWidget {
 
@@ -63,9 +67,9 @@ class Rewards extends StatelessWidget {
             Center(
               child: Padding(
                 padding: const EdgeInsets.all(7),
-                child:pic.isNotEmpty?CircleAvatar(
+                child:AppSession.currentUser!.pic.isNotEmpty?CircleAvatar(
                   radius: 68,
-                  backgroundImage: NetworkImage(pic),
+                  backgroundImage: NetworkImage(AppSession.currentUser!.pic),
                 ): CircleAvatar(
                   radius: 68,
                   backgroundColor: Colors.grey.shade300,
@@ -88,32 +92,16 @@ class Rewards extends StatelessWidget {
               ),
             ),
             SizedBox(height: 6,),
-            Text("Demo Name",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 21),),
+            Text(AppSession.currentUser!.Name,style: TextStyle(fontWeight: FontWeight.w800,fontSize: 21),),
             Text(FirebaseAuth.instance.currentUser!.email??"None",style: TextStyle(fontWeight: FontWeight.w400),),
             SizedBox(height: 19,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InkWell(
-                    onTap: (){
-
-                    },
-                    child: f("assets/buy-cart-market-svgrepo-com.svg", "In Cart", context,"54")),
-                InkWell(
-                    onTap: (){
-
-                    },
-                    child: f("assets/delivery-svgrepo-com.svg", "In Transist", context,"69")),
-                InkWell(
-                    onTap: (){
-                       },
-                    child: f("assets/paid-svgrepo-com.svg", "Total Buyed", context,"40")),
-              ],
-            ),
             SizedBox(height: 10,),
             InkWell(
               onTap: (){
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyProfile()),
+                );
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -140,58 +128,53 @@ class Rewards extends StatelessWidget {
             ),
             InkWell(
                 onTap: (){
-
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Applications(shows: true,)),
+                  );
                 },
-                child: r(w, "All Services", Icon(Icons.account_balance_wallet))),
+                child: ras(w, "All Services", Icon(Icons.segment_rounded,color: Colors.black,))),
             InkWell(
                 onTap: (){
-
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Services(shows: true, searchable: '',)),
+                  );
                 },
-                child: r(w, "My Bookings", Icon(Icons.search))),
-            InkWell(
-                onTap: (){
-
-                },
-                child: r(w, "In Transit", Icon(Icons.chat))),
-            InkWell(
-                onTap: (){
-
-                },
-                child: r(w, "My Filled Forms", Icon(Icons.gamepad))),
-            InkWell(
+                child: ras(w, "My Bookings", Icon(Icons.menu,color: Colors.black,))),
+               InkWell(
                 onTap: () async {
-                  final Uri _url = Uri.parse('https://www.instagram.com/sukhdev_saran58');
+                  final Uri _url = Uri.parse('https://wa.me/918848371829');
                   if (!await launchUrl(_url)) {
                     throw Exception('Could not launch $_url');
                   }
                 },
-                child: r(w, "Help & Support", Icon(Icons.support_agent_outlined))),
-            InkWell(
-                onTap: (){
+                child: ras(w, "Help & Support", Icon(Icons.support_agent_outlined,color: Colors.black,))),
 
-                },
-                child: r(w, "Transactions", Icon(Icons.local_activity_rounded))),
             InkWell(
                 onTap: () async {
-                  final Uri _url = Uri.parse('https://sites.google.com/view/starwishterms/privacy_policy');
+                  final Uri _url = Uri.parse('https://iskargreenhomes.com/about-us/');
                   if (!await launchUrl(_url)) {
                     throw Exception('Could not launch $_url');
                   }
                 },
-                child: r(w, "Privacy Policy", Icon(Icons.privacy_tip))),
+                child: ras(w, "Our Website", Icon(Icons.language,color: Colors.black,))),
             InkWell(
                 onTap: () async {
-                  final Uri _url = Uri.parse('https://sites.google.com/view/starwishterms/termscondition');
+                  final Uri _url = Uri.parse('tel:8848371829');
                   if (!await launchUrl(_url)) {
                     throw Exception('Could not launch $_url');
                   }
                 },
-                child: r(w, "Terms & Condition", Icon(Icons.accessibility_new))),
+                child: ras(w, "Call Us", Icon(Icons.call_rounded,color: Colors.black,))),
             InkWell(
                 onTap: (){
-
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Refer()),
+                  );
                 },
-                child: r(w, "Refer", Icon(Icons.card_giftcard))),
+                child: ras(w, "Refer & Share ", Icon(Icons.share,color: Colors.black,))),
             InkWell(
               onTap: (){
                 FirebaseAuth auth = FirebaseAuth.instance;
@@ -231,7 +214,7 @@ class Rewards extends StatelessWidget {
       ),
     );
   }
-  Widget r(double w, String str,Widget r)=>Center(
+  Widget ras(double w, String str,Widget r1)=>Center(
     child: Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -241,7 +224,7 @@ class Rewards extends StatelessWidget {
         padding: const EdgeInsets.all(14.0),
         child: Row(
           children: [
-            r,
+            r1,
             SizedBox(width: 7,),
             Text(str,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500),),
             Spacer(),

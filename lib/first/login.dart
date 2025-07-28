@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../functions/flush.dart';
 import '../global.dart';
@@ -78,7 +79,6 @@ class _LoginScreenState extends State<LoginScreen> {
         return exit ?? false;
       },
       child: Scaffold(
-
         backgroundColor: Colors.white,
         body: on ? Stack(
           children: [
@@ -243,7 +243,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               });
                           }
                           ),
-
                           TextButton(
                               child : Text("Forgot Password ?", style : TextStyle(color : Global.bg)), onPressed : (){
                             Navigator.push(
@@ -343,35 +342,44 @@ class _LoginScreenState extends State<LoginScreen> {
                               });
                             },
                           ),
-                          Container(
-                            width: w-100,
-                            child: RichText(
-                              text: TextSpan(
-                                text: "By continuing, You agree to our ",
-                                style: TextStyle(color: Colors.black, fontSize: 13),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: 'Terms & Condition',
-                                    style: TextStyle(
-                                        color: Colors.blue,
-                                        decoration: TextDecoration.underline,fontSize: 13
+                          InkWell(
+                            onTap:() async {
+                              final Uri _url = Uri.parse('https://www.brnrinnovations.com/app-privacy-policy');
+                              if (!await launchUrl(_url)) {
+                              throw Exception('Could not launch $_url');
+                              }
+                            },
+                            child: Container(
+                              width: w-100,
+                              child: RichText(
+                                text: TextSpan(
+                                  text: "By continuing, You agree to our ",
+                                  style: TextStyle(color: Colors.black, fontSize: 13),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: 'Terms & Condition',
+                                      style: TextStyle(
+                                          color: Colors.blue,
+                                          decoration: TextDecoration.underline,fontSize: 13
+                                      ),
+                                    ),TextSpan(
+                                      text: ' our ',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 13
+                                      ),
+                                    ),TextSpan(
+                                      text: 'Privacy Policy',
+                                      style: TextStyle(
+                                          color: Colors.blue,
+                                          decoration: TextDecoration.underline,fontSize: 13
+                                      ),
                                     ),
-                                  ),TextSpan(
-                                    text: ' our ',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 13
-                                    ),
-                                  ),TextSpan(
-                                    text: 'Privacy Policy',
-                                    style: TextStyle(
-                                        color: Colors.blue,
-                                        decoration: TextDecoration.underline,fontSize: 13
-                                    ),
-                                  ),
-                                ],
-                              ),),
+                                  ],
+                                ),),
+                            ),
                           ),
+
                         ],
                       ),
                     ),
@@ -442,23 +450,19 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> checkonce(String uid) async {
     String df=_emailController.text;
     if(df=="brnrinnovation@gmail.com"||df=="admin@signxhrm.com"){
-
     }else{
       CollectionReference usersCollection = FirebaseFirestore.instance.collection('Users');
       QuerySnapshot querySnapshot = await usersCollection.where('uid', isEqualTo: uid).get();
       if (querySnapshot.docs.isNotEmpty) {
         UserModel user = UserModel.fromSnap(querySnapshot.docs.first);
         if(user.Name.isEmpty){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Step1(strr: user.type,source: user.source)));
-
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Step1()));
         }else{
           Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Navigation()));
-
-
         }
         Send.message(context, "Login Success !",true);
       } else {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Step1(strr: strin,)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Step1()));
         Send.message(context, "Welcome, We will need some additional details for Account to Set Up", true);
       }
     }

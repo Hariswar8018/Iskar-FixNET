@@ -1,30 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:iskar/service/service_card.dart';
+import 'package:iskar/admin/main_pages/bookings.dart';
 
-import '../global.dart';
-import '../model/fill_form.dart';
-import '../service/card.dart';
+import '../../global.dart';
+import '../../model/usermodel.dart';
 
-class Services extends StatelessWidget {
-  bool shows;String searchable;
-   Services({super.key,this.shows=false,required this.searchable});
-  List<FillFormModel> _list = [];
+class AllUsers extends StatelessWidget {
+  AllUsers({super.key});
+  List<UserModel> _list = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Global.bg,
-        iconTheme: IconThemeData(
-          color: Colors.white
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+              color: Colors.white
+          ),
+          automaticallyImplyLeading: true,
+          backgroundColor: Global.bg,
+          title: Text("All Users",style: TextStyle(color: Colors.white),),
         ),
-        automaticallyImplyLeading: shows,
-        title: Text("My Bookings",style: TextStyle(color: Colors.white),),
-      ),
       body: StreamBuilder(
         stream:FirebaseFirestore.instance
-            .collection('services').where("customerId",isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .collection('Users')
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -56,14 +53,27 @@ class Services extends StatelessWidget {
           final data = snapshot.data?.docs;
           _list.clear();
           _list.addAll(
-              data?.map((e) => FillFormModel.fromJson(e.data())).toList() ??
+              data?.map((e) => UserModel.fromJson(e.data())).toList() ??
                   []);
           return ListView.builder(
             itemCount: _list.length,
             padding: EdgeInsets.only(top: 10),
             physics: BouncingScrollPhysics(),
             itemBuilder: (context, index) {
-              return ChatUser(form: _list[index],);
+              final user = _list[index];
+              return Card(
+                color: Colors.white,
+                child: ListTile(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (_)=>Bookings(user: user,)));
+                  },
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(user.pic),
+                  ),
+                  title: Text(user.Name,style: TextStyle(fontWeight: FontWeight.w800),),
+                  subtitle: Text(user.Email),
+                ),
+              );
             },
           );
         },
@@ -71,4 +81,3 @@ class Services extends StatelessWidget {
     );
   }
 }
-

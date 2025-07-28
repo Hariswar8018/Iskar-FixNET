@@ -21,6 +21,16 @@ class _ApplicationsState extends State<Applications> {
     searchController.text="";
     filteredServices = services;  // Initially show all
 
+    if(widget.search.isNotEmpty){
+      searchController.text=widget.search;
+      filteredServices = services
+          .where((service) =>
+          service.name.toLowerCase().contains(widget.search.toLowerCase()))
+          .toList();
+    }
+    setState(() {
+
+    });
   }
 
   @override
@@ -29,6 +39,9 @@ class _ApplicationsState extends State<Applications> {
     return Scaffold(
       backgroundColor: Global.background,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white
+        ),
         automaticallyImplyLeading: widget.shows,
         backgroundColor: Global.bg,
         title: Text("All Services",style: TextStyle(color: Colors.white),),

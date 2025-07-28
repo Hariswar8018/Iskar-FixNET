@@ -34,7 +34,7 @@ class _NavigationState extends State<Navigation> {
 
   Widget as(int i ){
     if( i == 1){
-      return Services();
+      return Services(searchable: '',);
     }else if(i == 0){
       return Home();
     }else if(i == 2){
@@ -59,23 +59,12 @@ class _NavigationState extends State<Navigation> {
     }
   }
 
- /* void vq() async {
-    try {
-      UserProvider _userprovider = Provider.of<UserProvider>(context, listen: false);
-      await _userprovider.refreshuser();
-      print("User Data: ${_userprovider.getUser}");
-    } catch (e, stacktrace) {
-      print("Error in vq: $e, Stacktrace: $stacktrace");
-    }
-  }
-*/
-
 
   @override
   Widget build(BuildContext context) {
     String? df=FirebaseAuth.instance.currentUser!.email;
     print(df);
-    if(df!=null && df=="brnrinnovation@gmail.com"||df=="admin@zeitt.com"){
+    if(df!=null && df=="my@gmail.com"||df=="rajishms@gmail.com"||df=="rajeesh@iskargreenhomes.com"){
       return WillPopScope(
         onWillPop: () async {
           bool exit = await showDialog(
@@ -113,6 +102,12 @@ class _NavigationState extends State<Navigation> {
     }else{
       return  WillPopScope(
         onWillPop: () async {
+          if(visit!=0){
+            setState(() {
+              visit=0;
+            });
+            return false;
+          }
           bool exit = await showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -176,7 +171,7 @@ const List<TabItem> items = [
   ),
   TabItem(
     icon: Icons.home_work_rounded,
-    title: 'Applications',
+    title: 'Services',
   ),
   TabItem(
     icon: Icons.person,
