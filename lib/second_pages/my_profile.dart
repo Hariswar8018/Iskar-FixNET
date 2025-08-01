@@ -23,7 +23,10 @@ class _MyProfileState extends State<MyProfile> {
     phone.text=AppSession.currentUser!.phone;
     bio.text=AppSession.currentUser!.bio;
     email.text=AppSession.currentUser!.Email;
+    emailon=AppSession.currentUser!.byphone;
   }
+
+  bool emailon=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +79,7 @@ class _MyProfileState extends State<MyProfile> {
                   padding: const EdgeInsets.only( left :25, right : 25.0),
                   child: TextFormField(
                     controller: name,
-                    keyboardType: TextInputType.emailAddress,
+                    keyboardType: TextInputType.name,
                     decoration: InputDecoration(
                       labelText: 'Your Name',
                       isDense: true,
@@ -97,7 +100,7 @@ class _MyProfileState extends State<MyProfile> {
               child: Padding(
                   padding: const EdgeInsets.only( left :25, right : 25.0),
                   child: TextFormField(
-                    controller: email,readOnly: true,
+                    controller: email,readOnly: !emailon,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: 'Your Email',
@@ -119,11 +122,12 @@ class _MyProfileState extends State<MyProfile> {
               child: Padding(
                   padding: const EdgeInsets.only( left :25, right : 25.0),
                   child: TextFormField(
-                    controller: phone,
+                    controller: phone,readOnly: emailon,
                     keyboardType: TextInputType.phone,maxLength: 10,
                     decoration: InputDecoration(
                       labelText: 'Your Phone',
                       isDense: true,
+                      counterText: '',
                       border: InputBorder.none, // No border
                     ),
                   )

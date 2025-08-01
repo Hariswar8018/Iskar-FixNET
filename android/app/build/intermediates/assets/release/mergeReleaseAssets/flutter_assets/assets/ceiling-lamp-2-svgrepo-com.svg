@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="-3 0 20 20" xmlns="http://www.w3.org/2000/svg">
+  <g id="ceiling-lamp-2" transform="translate(-5 -2)">
+    <path id="secondary" fill="#2ca9bc" d="M14,8.42V8a2,2,0,0,0-4,0v.42A5,5,0,0,0,7,13v1H17V13a5,5,0,0,0-3-4.58Z"/>
+    <path id="primary" d="M12,6V3M6,14H18M14,8.42V8a2,2,0,0,0-4,0v.42A5,5,0,0,0,7,13v1H17V13a5,5,0,0,0-3-4.58ZM12,19v2m3.83-3.17,1.41,1.41M8.17,17.83,6.76,19.24M10,3h4" fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  </g>
+</svg>

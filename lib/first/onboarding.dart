@@ -26,175 +26,180 @@ class TestScreenState extends State<TestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return OnBoardingSlider(
-      finishButtonText: 'Login',
-      onFinish: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => LoginScreen(),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: OnBoardingSlider(
+        finishButtonText: 'Login',
+        onFinish: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginScreen(),
+            ),
+          );
+        },
+        finishButtonStyle: FinishButtonStyle(
+          backgroundColor: kDarkBlueColor,
+        ),
+        skipTextButton: Text(
+          'Skip',
+          style: TextStyle(
+            fontSize: 16,
+            color: kDarkBlueColor,
+            fontWeight: FontWeight.w600,
           ),
-        );
-      },
-      finishButtonStyle: FinishButtonStyle(
-        backgroundColor: kDarkBlueColor,
+        ),
+        trailing: Text(
+          'Login',
+          style: TextStyle(
+            fontSize: 16,
+            color: kDarkBlueColor,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        trailingFunction: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>  LoginScreen(),
+            ),
+          );
+        },
+        controllerColor: kDarkBlueColor,
+        totalPage: 3,
+        headerBackgroundColor: Colors.white,
+        pageBackgroundColor: Colors.white,
+        background: [
+          Center(
+            child: Image.asset(
+              'assets/WhatsApp_Image_2025-07-30_at_5.58.48_PM-removebg-preview.png',
+              width : MediaQuery.of(context).size.width ,
+            ),
+          ),
+          Center(
+            child: Image.asset(
+              'assets/2df42e47-e39f-47c5-8de2-f6087818279f__1_-removebg-preview.png',
+              width : MediaQuery.of(context).size.width,
+            ),
+          ),
+          Center(
+            child: Image.asset(
+              'assets/WhatsApp_Image_2025-07-30_at_5.58.48_PM__1_-removebg-preview.png',
+              width : MediaQuery.of(context).size.width ,
+            ),
+          ),
+        ],
+        speed: 1.8,
+        pageBodies: [
+          Container(
+            alignment: Alignment.center,
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height:giveheight,
+                ),
+                Text(
+                  'Easy, Clean, and Affordable',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: kDarkBlueColor,
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Start your Home Service journey with Iskar Fixnest. From Total House Renovation to Deep Cleaning, we bring all your home needs under one roof',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black26,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height:giveheight,
+                ),
+                Text(
+                  'Book Services in One Touch',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: kDarkBlueColor,
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Fill the service request form and we’ll take care of the rest. Whether it’s Annual Maintenance, Electrical & Plumbing works, or Pest Control, we make it simple and hassle-free.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black26,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                 SizedBox(
+                  height:giveheight,
+                ),
+                Text(
+                  'Home Services at Affordable Cost',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: kDarkBlueColor,
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Enjoy top-class home care with Iskar Fixnest. From Civil Construction, Painting & Carpentry to AC Maintenance and Modular Kitchens – all in one app. Reliable. Professional. Affordable.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black26,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      skipTextButton: Text(
-        'Skip',
-        style: TextStyle(
-          fontSize: 16,
-          color: kDarkBlueColor,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      trailing: Text(
-        'Login',
-        style: TextStyle(
-          fontSize: 16,
-          color: kDarkBlueColor,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      trailingFunction: () {
-        Navigator.push(
-          context,
-          CupertinoPageRoute(
-            builder: (context) =>  LoginScreen(),
-          ),
-        );
-      },
-      controllerColor: kDarkBlueColor,
-      totalPage: 3,
-      headerBackgroundColor: Colors.white,
-      pageBackgroundColor: Colors.white,
-      background: [
-        Center(
-          child: Image.asset(
-            'assets/home.jpg',
-            width : MediaQuery.of(context).size.width ,
-          ),
-        ),
-        Center(
-          child: Image.asset(
-            'assets/online-shopping-concept-in-3d-isometric-design-people-ordering-food-in-supermarket-cart-and-delivery-to-home-using-mobile-phone-application-illustration-with-isometry-scene-for-web-graphic-vector.jpg',
-            width : MediaQuery.of(context).size.width,
-          ),
-        ),
-        Center(
-          child: Image.asset(
-            'assets/shop.jpg',
-            width : MediaQuery.of(context).size.width ,
-          ),
-        ),
-      ],
-      speed: 1.8,
-      pageBodies: [
-        Container(
-          alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(
-                height: 480,
-              ),
-              Text(
-                'Buy Home Application at Affordable Cost',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: kDarkBlueColor,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'Best Home Application Service in India, from Booking to Installment',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black26,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(
-                height: 480,
-              ),
-              Text(
-                'Buy and Fill Form in 1 Touch',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: kDarkBlueColor,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'Fill the booking form and we will take care of Rest',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black26,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(
-                height: 480,
-              ),
-              Text(
-                'Easy, Clean, and Affordable',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: kDarkBlueColor,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'Start your Home Application Journey with us ....Take your Home to next level',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black26,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
+
+  double giveheight=400;
 }

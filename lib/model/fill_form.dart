@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:iskar/model/service.dart';
 
 class FillFormModel {
   FillFormModel({
@@ -22,7 +23,8 @@ class FillFormModel {
     required this.customerName,
     required this.customerPic,
     required this.status,
-    required this.sheduledate
+    required this.sheduledate,
+    required this.added
   });
 
   late final String name;
@@ -48,7 +50,13 @@ class FillFormModel {
 
   late final String sheduledate;
 
+  late final List<Service> added;
+
   FillFormModel.fromJson(Map<String, dynamic> json) {
+    added = (json['added'] as List<dynamic>?)
+        ?.map((e) => Service.fromJson(e as Map<String, dynamic>))
+        .toList() ?? [];
+
     name = json['name'] ?? '';
     sheduledate=json['sheduledate']??'';
     status = json['status']??'';
@@ -75,6 +83,7 @@ class FillFormModel {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['name'] = name;
+    data['added'] = added.map((e) => e.toJson()).toList();
     data['sheduledate']=sheduledate;
     data['id'] = id;
     data['email'] = email;

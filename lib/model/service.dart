@@ -10,6 +10,20 @@ class Service {
   final String assetLink;
 
   Service({required this.name, required this.assetLink});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'assetLink': assetLink,
+    };
+  }
+
+  factory Service.fromJson(Map<String, dynamic> json) {
+    return Service(
+      name: json['name'] ?? '',
+      assetLink: json['assetLink'] ?? '',
+    );
+  }
 }
 
 
@@ -17,19 +31,11 @@ class ServiceCard{
   static Widget card(double w, Service service,BuildContext context){
      return InkWell(
        onTap: (){
-         if(FirebaseAuth.instance.currentUser!.emailVerified){
-           Navigator.push(
-             context,
-             MaterialPageRoute( builder: (context) =>  FillForm(service: service,),
-             ),
-           );
-         }else{
-           Navigator.push(
-             context,
-             MaterialPageRoute( builder: (context) =>  EmailVerifu(),
-             ),
-           );
-         }
+         Navigator.push(
+           context,
+           MaterialPageRoute( builder: (context) =>  FillForm(service: service,),
+           ),
+         );
        },
        child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5.0),
@@ -84,6 +90,7 @@ class ServiceCard{
                 )),
             SizedBox(height: 6,),
             Container(width:w/5+10, child: Text(textAlign: TextAlign.center, service.name,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 11),)),
+         SizedBox(height: 10,)
           ],
         ),
       ),
@@ -95,17 +102,17 @@ final List<Service> services = [
   Service(name: 'Annual Maintenance', assetLink: 'assets/house-big-svgrepo-com.svg'),
   Service(name: 'Civil Construction', assetLink: 'assets/construction-crane-lifter-svgrepo-com.svg'),
   Service(name: 'Painting & Carpentry', assetLink: 'assets/brush-paint-red-svgrepo-com.svg'),
-  Service(name: 'Electrical & Plumbing Works', assetLink: 'assets/plumbing-pipe-svgrepo-com.svg'),
-  Service(name: 'AC Maintenance', assetLink: 'assets/ac-svgrepo-com.svg'),
-  Service(name: 'Interior & Modular Kitchen Works', assetLink: 'assets/kitchen-ecommerce-shop-svgrepo-com.svg'),
-  Service(name: 'Pest Control', assetLink: 'assets/rat-svgrepo-com.svg'),
-  Service(name: 'Land Survey, Plans & Estimation', assetLink: 'assets/lake-land-nature-svgrepo-com.svg'),
-  Service(name: 'False Ceiling Works', assetLink: 'assets/ceiling-lamp-2-svgrepo-com.svg'),
+  Service(name: 'Electrical & Plumbing ', assetLink: 'assets/plumbing-pipe-svgrepo-com.svg'),
+  Service(name: 'Air Conditioning Maintenance', assetLink: 'assets/ac-svgrepo-com.svg'),
+  Service(name: 'Interior & Modular Kitchen', assetLink: 'assets/kitchen-ecommerce-shop-svgrepo-com.svg'),
+  Service(name: 'Pest & Rodents Control', assetLink: 'assets/rat-svgrepo-com.svg'),
+  Service(name: 'Land Survey & Plans', assetLink: 'assets/lake-land-nature-svgrepo-com.svg'),
+  Service(name: 'False Ceiling Works', assetLink: 'assets/7699977 (1).svg'),
   Service(name: 'Landscaping & Interlocking', assetLink: 'assets/landscape-mountain-svgrepo-com.svg'),
-  Service(name: 'Annual & Periodic Maintenances', assetLink: 'assets/spring-icon-svgrepo-com.svg'),
+  Service(name: 'Periodic Maintenances', assetLink: 'assets/spring-icon-svgrepo-com.svg'),
   Service(name: 'Deep Cleaning', assetLink: 'assets/sweep-the-floor-svgrepo-com.svg'),
   Service(name: 'Roofing', assetLink: 'assets/roof-svgrepo-com.svg'),
-  Service(name: 'Third-Party Supervision of Construction', assetLink: 'assets/construction-crane-lifter-svgrepo-com.svg'),
+  Service(name: 'Supervision of Construction', assetLink: 'assets/construction-crane-lifter-svgrepo-com.svg'),
 ];
 
 

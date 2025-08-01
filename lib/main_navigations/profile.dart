@@ -93,7 +93,7 @@ class Rewards extends StatelessWidget {
             ),
             SizedBox(height: 6,),
             Text(AppSession.currentUser!.Name,style: TextStyle(fontWeight: FontWeight.w800,fontSize: 21),),
-            Text(FirebaseAuth.instance.currentUser!.email??"None",style: TextStyle(fontWeight: FontWeight.w400),),
+            Text((AppSession.currentUser!.byphone)?AppSession.currentUser!.phone:AppSession.currentUser!.Email,style: TextStyle(fontWeight: FontWeight.w400),),
             SizedBox(height: 19,),
             SizedBox(height: 10,),
             InkWell(

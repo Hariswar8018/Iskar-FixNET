@@ -7,6 +7,9 @@ import 'package:im_stepper/stepper.dart';
 import 'package:iskar/functions/flush.dart';
 import 'package:iskar/global.dart';
 import 'package:iskar/model/service.dart';
+import 'package:iskar/notification/notify_all.dart';
+import 'package:iskar/service/list_show.dart';
+import 'package:iskar/service/return_service.dart';
 
 import '../model/fill_form.dart';
 import 'package:location_manager_flutter/location_manager.dart';
@@ -63,6 +66,9 @@ class _FillFormState extends State<FillForm> {
     final user = AppSession.currentUser;
     customerpic=user!.pic;
     customername=user.Name;
+
+    emailreadonly=!(user.byphone);
+    phoneController.text=user.phone;
   }
 
   String customerpic = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",customername="";
@@ -72,8 +78,9 @@ class _FillFormState extends State<FillForm> {
         Send.message(context,"Address is Required",false);
         return ;
       }
-      if(phoneController.text.isEmpty){
-        Send.message(context,"Phone is Required",false);
+      print(phoneController.text.length);
+      if(phoneController.text.length!=10){
+        Send.message(context,"Phone is Required and should be 10 digit",false);
         return ;
       }
       if(pincodeController.text.isEmpty){
@@ -101,9 +108,10 @@ class _FillFormState extends State<FillForm> {
         bio: bioController.text,
         doc: docController.text,
         paid: paid, customerId: FirebaseAuth.instance.currentUser!.uid,
-        customerName: customername, customerPic: customerpic, status: 'Pending', sheduledate: '',
+        customerName: customername, customerPic: customerpic, status: 'Pending', sheduledate: '', added: added,
       );
       await FirebaseFirestore.instance.collection("services").doc(id).set(model.toJson());
+      await NotifyAll.sendNotificationsAdmin("New Service applied by ${customername} ", "$customername applied for New Serivce Now ! Click to view");
       setState(() {
         on=true;
       });
@@ -120,9 +128,10 @@ class _FillFormState extends State<FillForm> {
     // You can also save this to Firestore:
     // FirebaseFirestore.instance.collection('fillForms').add.toJson());(model
   }
-
+  bool emailreadonly=true;
+  List<Service> added =[];
   void initState(){
-    emailController.text=FirebaseAuth.instance.currentUser!.email ??"har@g.com";
+    emailController.text=FirebaseAuth.instance.currentUser!.email ??"";
     getuser();
     setState(() {
 
@@ -208,7 +217,34 @@ class _FillFormState extends State<FillForm> {
             ),
           ),
         ),
-        textField4('Custom Installation Details', serviceNameController),
+        Container(
+          width: w,
+          child: Card(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: ListTile(
+                onTap: () async {
+                  List<Service> ser = await Navigator.push(
+                    context,
+                    MaterialPageRoute( builder: (context) =>  ReturnService(),
+                    ),
+                  );
+                  if(ser.isNotEmpty){
+                    added=ser;
+                    setState(() {
+
+                    });
+                  }
+                },
+                leading:added.isNotEmpty?Icon(Icons.shopping_cart,) :Icon(Icons.add,color: Colors.red,),
+                title: Text(added.isNotEmpty?"Added ${added.length} extra Service":"Add More Service",style: TextStyle(fontWeight: FontWeight.w800),),
+                subtitle: Text(added.isNotEmpty?"You have Selected ${added.length} extra Service along with this Order":"Do 2 or more service at the same time"),
+              ),
+            ),
+          ),
+        ),
+        textField4('Details of Ordered Services', serviceNameController),
         textField4('Any Additional Info you want to Submit ?', bioController),
       ],
     );
@@ -231,10 +267,76 @@ class _FillFormState extends State<FillForm> {
         textField('Pincode', pincodeController),
         textField('Landmark', landmarkController),
         textField('City', cityController),
-        textField('State', stateController),
+        Row(
+          children: [
+            Container(
+                width: w/2-20,
+                child: textField('State', stateController)),
+            SizedBox(width: 9,),
+            InkWell(
+              onTap: (){
+                showStatePicker();
+              },
+              child: Container(
+                  width: w/2-20,
+                  child: Center(
+                    child: Container(
+                      width : MediaQuery.of(context).size.width/2 - 20, height : 60,
+                      decoration: BoxDecoration(
+                        color: Global.bg , // Background color of the container
+                        borderRadius: BorderRadius.circular(4.0), // Rounded corners
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1), // Shadow color
+                            spreadRadius: 5, // Spread radius
+                            blurRadius: 7, // Blur radius
+                            offset: Offset(0, 3), // Shadow position
+                          ),
+                        ],
+                      ),
+                      child : Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Select State', style : TextStyle( color : Colors.white,fontWeight: FontWeight.w900)),
+                          SizedBox(width: 10,),
+                          Icon(Icons.waving_hand_rounded,color: Colors.white,),
+                        ],
+                      ),
+                    ),
+                  ),),
+            ),
+          ],
+        ),
       ],
     );
   }
+  void showStatePicker() async {
+    String? result = await showModalBottomSheet<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return ListView.builder(
+          itemCount: indianStates.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(indianStates[index]),
+              onTap: () {
+                Navigator.pop(context, indianStates[index]);
+              },
+            );
+          },
+        );
+      },
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedState = result;
+        stateController.text=result;
+      });
+    }
+  }
+
   bool on = false;
   Future<void> getlocation() async {
     try {
@@ -270,16 +372,16 @@ class _FillFormState extends State<FillForm> {
         textField('Name', nameController),
         Row(
           children: [
-            Container(width:w*4/5, child: textField2('Email', emailController)),
+            Container(width:w*4/5, child: textField2('Email', emailController,emailreadonly,false)),
             Spacer(),
-            FirebaseAuth.instance.currentUser!.emailVerified?Icon(Icons.verified,color: Colors.green,):Icon(Icons.cancel,color: Colors.red,)
+            emailreadonly?Icon(Icons.verified,color: Colors.green,):Icon(Icons.cancel,color: Colors.red,)
             ,SizedBox(width: 15,)],
         ),
         Row(
           children: [
-            Container(width:w*4/5, child:   textFieldnum('Phone', phoneController),),
+            Container(width:w*4/5, child:   textField2('Phone', phoneController,!emailreadonly,true),),
             Spacer(),
-            FirebaseAuth.instance.currentUser!.emailVerified?Icon(Icons.verified,color: Colors.green,):Icon(Icons.cancel,color: Colors.red,)
+            !emailreadonly?Icon(Icons.verified,color: Colors.green,):Icon(Icons.cancel,color: Colors.red,)
             ,SizedBox(width: 15,)],
         ),
 
@@ -308,6 +410,14 @@ class _FillFormState extends State<FillForm> {
                       leading: SvgPicture.asset(widget.service.assetLink,width: 50,),
                       title: Text(widget.service.name,style: TextStyle(fontWeight: FontWeight.w800),),
                       subtitle: Text("Service Selected from Services"),
+                    ),
+                    added.isEmpty?SizedBox():ListTile(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (_)=>ListShow(list: added)));
+                      },
+                      leading: Icon(Icons.shopping_cart),
+                      trailing: Icon(Icons.arrow_forward_rounded),
+                      title: Text("Added ${added.length} Extra Services",style: TextStyle(fontWeight: FontWeight.w800),),
                     ),
                   ],
                 ),
@@ -423,12 +533,14 @@ class _FillFormState extends State<FillForm> {
       ),
     );
   }
-  Widget textField2(String label, TextEditingController controller) {
+  Widget textField2(String label, TextEditingController controller,bool readonly,bool num) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: TextField(
-        readOnly: true,
+        readOnly: readonly,
         controller: controller,
+        maxLength: num?10:50,
+        keyboardType:num?TextInputType.number: TextInputType.emailAddress,
         decoration: InputDecoration(
           labelText: label,
           border: const OutlineInputBorder(),
@@ -531,4 +643,44 @@ class _FillFormState extends State<FillForm> {
         return 'Service Information';
     }
   }
+  String? selectedState;
+
+  List<String> indianStates = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+    "Andaman and Nicobar Islands",
+    "Chandigarh",
+    "Dadra and Nagar Haveli and Daman and Diu",
+    "Delhi",
+    "Jammu and Kashmir",
+    "Ladakh",
+    "Lakshadweep",
+    "Puducherry"
+  ];
 }

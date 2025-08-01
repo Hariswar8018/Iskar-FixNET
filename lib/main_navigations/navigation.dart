@@ -1,8 +1,12 @@
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:awesome_bottom_bar/tab_item.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:iskar/main_navigations/profile.dart';
 import 'package:iskar/main_navigations/services.dart';
@@ -20,6 +24,93 @@ class Navigation extends StatefulWidget {
 }
 
 class _NavigationState extends State<Navigation> {
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+
+  void fg() async{
+    print("Going...................91");
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+    );
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("Received message in foreground: ${message.notification?.title}");
+      _showNotification(message);
+    });
+  }
+
+  Future<void> _showNotification(RemoteMessage message) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+      'your_channel_id', // Replace with your channel ID
+      'your_channel_name', // Replace with your channel name
+      channelDescription: 'Your channel description', // Replace with your channel description
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: false,
+    );
+
+    const NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+      0, // Notification ID
+      message.notification?.title,
+      message.notification?.body,
+      platformChannelSpecifics,
+      payload: 'item x',
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    requestNotificationPermission();
+  }
+
+
+  void requestNotificationPermission() async {
+    NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('✅ User granted permission');
+      fg();yu();
+    } else if (settings.authorizationStatus == AuthorizationStatus.denied) {
+      print('❌ User denied permission');
+    } else if (settings.authorizationStatus == AuthorizationStatus.notDetermined) {
+      print('❓ Permission not determined');
+    }
+  }
+
+  Future<void> yu() async {
+    try {
+      final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+      CollectionReference collection =
+      FirebaseFirestore.instance.collection('Users');
+      String? token = await _firebaseMessaging.getToken();
+      print(token);
+      if (token != null) {
+        await collection.doc(FirebaseAuth.instance.currentUser!.uid).update({
+          'token': token,
+        });
+        _firebaseMessaging.requestPermission();
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+
+  }
   int visit = 0;
 
   double height = 30;

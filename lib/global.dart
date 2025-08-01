@@ -14,7 +14,7 @@ import 'main_navigations/applications.dart';
 
 class Global {
 
-  static Color bg = Color(0xff9C57CC);
+  static Color bg = Color(0xff3278B3);
 
   static Color background = Color(0xffEFE7FF);
 
@@ -84,7 +84,8 @@ class Global {
                         )
                     ),
                   ),
-                  Text(" Iskar InfoTech",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 21),),
+                  SizedBox(width: 3,),
+                  Text(" Iskar Fixnest",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 21),),
                   Text(" v 1.0.0",style: TextStyle(fontWeight: FontWeight.w300,color: Colors.grey,fontSize: 9),),
                 ],
               ),

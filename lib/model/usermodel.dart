@@ -11,6 +11,7 @@ class UserModel {
     required this.phone,
     required this.dob,
     required this.pic,
+    required this.byphone
   });
 
   late final String Name;
@@ -23,8 +24,11 @@ class UserModel {
   late final String phone;
   late final String dob;
 
+  late final bool byphone;
+
   UserModel.fromJson(Map<String, dynamic> json) {
     Name = json['name'] ?? '';
+    byphone=json['byphone']??false;
     Email = json['email'] ?? '';
     uid = json['uid'] ?? '';
     lastLogin = json['last'] ?? '';
@@ -38,6 +42,7 @@ class UserModel {
   Map<String, dynamic> toJson() {
     return {
       'name': Name,
+      'byphone':byphone,
       'email': Email,
       'uid': uid,
       'last': lastLogin,

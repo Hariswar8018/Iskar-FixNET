@@ -2,15 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-
+import 'package:iskar/first/phone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../functions/flush.dart';
 import '../global.dart';
 import '../main.dart';
-import '../main_navigations/navigation.dart';
 import '../model/usermodel.dart';
 import 'forgot.dart';
 import 'info.dart';
@@ -42,13 +39,20 @@ class _LoginScreenState extends State<LoginScreen> {
   bool on = true;
     String var1 = " ";
     bool go = false ;
+  bool shownow=false;
   @override
   Widget build(BuildContext context) {
     double w=MediaQuery.of(context).size.width;
     double h=MediaQuery.of(context).size.height;
     return WillPopScope(
       onWillPop: () async {
-        // Show the alert dialog and wait for a result
+        if(shownow){
+          shownow=false;
+          setState(() {
+
+          });
+          return false;
+        }
         bool exit = await showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -83,12 +87,12 @@ class _LoginScreenState extends State<LoginScreen> {
         body: on ? Stack(
           children: [
             Image.network("https://img.freepik.com/free-vector/smart-home-background-with-smarthphone-control_23-2147846450.jpg",width: w,height: 360,fit: BoxFit.cover,),
-            Padding(
+            shownow?Padding(
               padding: const EdgeInsets.only(top:330),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20)
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20)
                 ),
                 width: w,height: h-240,
                 child: Column(
@@ -171,8 +175,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   TextSpan(
                                     text: 'Terms & Condition',
                                     style: TextStyle(
-                                      color: Colors.blue,
-                                      decoration: TextDecoration.underline,fontSize: 13
+                                        color: Colors.blue,
+                                        decoration: TextDecoration.underline,fontSize: 13
                                     ),
                                   ),TextSpan(
                                     text: ' our ',
@@ -234,28 +238,65 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding: const EdgeInsets.only(left : 15.0, right : 15),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children : [
-                          TextButton(
-                            child : Text("SignUp", style : TextStyle(color : Global.bg)), onPressed : (){
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children : [
+                            TextButton(
+                                child : Text("SignUp", style : TextStyle(color : Global.bg)), onPressed : (){
                               setState((){
                                 on = !on ;
                               });
-                          }
-                          ),
-                          TextButton(
-                              child : Text("Forgot Password ?", style : TextStyle(color : Global.bg)), onPressed : (){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute( builder: (context) =>  ForgotP(),
-                              ),
-                            );
-                          }
-                          ),
-                        ]
+                            }
+                            ),
+                            TextButton(
+                                child : Text("Forgot Password ?", style : TextStyle(color : Global.bg)), onPressed : (){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute( builder: (context) =>  ForgotP(),
+                                ),
+                              );
+                            }
+                            ),
+                          ]
                       ),
                     ),
 
+                  ],
+                ),
+              ),
+            ):Padding(
+              padding: const EdgeInsets.only(top:330),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20)
+                ),
+                width: w,height: h-240,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 20,),
+                    Center(
+                      child: Text("All that you need for your Home Application",textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+                    ),
+                    SizedBox(height: 60,),
+                   InkWell(
+                        onTap: () async {
+                          setState(() {
+                            shownow=true;
+                          });
+                        },
+                        child :Global.button(context,"Email Login",Icon(Icons.mail))),
+                    SizedBox(height: 2),
+                    Text("OR",style: TextStyle(fontWeight: FontWeight.w600),),
+                    SizedBox(height: 2),
+
+                    InkWell(
+                        onTap: () async {
+                          Navigator.push(context, MaterialPageRoute(builder: (_)=>OtpLoginScreen()));
+                        },
+                        child :Global.button(context,"Phone Login",Icon(Icons.phone))),
                   ],
                 ),
               ),
@@ -456,13 +497,13 @@ class _LoginScreenState extends State<LoginScreen> {
       if (querySnapshot.docs.isNotEmpty) {
         UserModel user = UserModel.fromSnap(querySnapshot.docs.first);
         if(user.Name.isEmpty){
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Step1()));
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>Step1()));
         }else{
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Navigation()));
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>MyApp()));
         }
         Send.message(context, "Login Success !",true);
       } else {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Step1()));
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>Step1()));
         Send.message(context, "Welcome, We will need some additional details for Account to Set Up", true);
       }
     }

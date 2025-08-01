@@ -5,6 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:iskar/functions/flush.dart';
 import 'package:iskar/model/fill_form.dart';
+import 'package:iskar/notification/notify_all.dart';
+import 'package:iskar/service/list_show.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:add_2_calendar_new/add_2_calendar_new.dart';
@@ -25,6 +27,40 @@ class ChatUser extends StatelessWidget {
         onTap: (){
           Navigator.push(context, MaterialPageRoute(builder: (_) => FullCard(form: form)));
         },
+        onLongPress: (){
+          if(!admin){
+            return ;
+          }
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text("Confirm"),
+              content: Text("Do you want to proceed?"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false); // No
+                  },
+                  child: Text("No"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context, true); // Yes
+                  },
+                  child: Text("Yes"),
+                ),
+              ],
+            ),
+          ).then((value) {
+            if (value == true) {
+              FirebaseFirestore.instance
+                  .collection('services').doc(form.id).delete();
+            } else {
+              // User pressed No or dismissed
+              print("No selected or dismissed");
+            }
+          });
+        },
         child: Card(
           color: Colors.white,
           child: Padding(
@@ -34,7 +70,7 @@ class ChatUser extends StatelessWidget {
               children: [
                 ListTile(
                   leading: card(),
-                  title: Text(form.serviceName,style: TextStyle(fontWeight: FontWeight.w800),),
+                  title: Text(form.serviceName+(form.added.isEmpty?"":" + ${form.added.length} more"),style: TextStyle(fontWeight: FontWeight.w800),),
                   subtitle: Text(form.status,style: TextStyle(fontWeight: FontWeight.w800),),
                   trailing: getStatusIcon(returnint(form.status)),
                 ),
@@ -48,7 +84,7 @@ class ChatUser extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       InkWell(
-                          onTap: (){
+                          onTap: () async {
                             try {
                               showStatusBottomSheet(context, (
                                   selectedStatus) async {
@@ -56,6 +92,7 @@ class ChatUser extends StatelessWidget {
                                     "services").doc(form.id).update({
                                   "status": selectedStatus,
                                 });
+                                await NotifyAll.sendNotificationsCustomer("Your Order was marked ${selectedStatus}", "An Admin Just marked your Order Status as ${selectedStatus}", form.customerId);
                               });
                             }catch(e){
                               Send.message(context, "$e", false);
@@ -126,6 +163,7 @@ class ChatUser extends StatelessWidget {
                               Send.message(context,
                                   "Order Sheduled for ${form.customerName}",
                                   true);
+                              await NotifyAll.sendNotificationsCustomer("Your Order was Scheduled for ${datetime(dateTime.toString())}", "An Admin Sheduled your Installation of ${form.serviceName} at ${datetime(dateTime.toString())}", form.customerId);
                             }
                           }catch(E){
                               Send.message(context, "$E", false);
@@ -322,9 +360,17 @@ class _FullCardState extends State<FullCard> {
         children: [
           ListTile(
             leading: SvgPicture.asset(widget.form.serviceLogo,width: 50,),
-            title: Text(widget.form.serviceName,style: TextStyle(fontWeight: FontWeight.w800),),
+            title: Text(widget.form.serviceName+(widget.form.added.isEmpty?"":" + ${widget.form.added.length} More"),style: TextStyle(fontWeight: FontWeight.w800),),
             subtitle: Text(widget.form.status,style: TextStyle(fontWeight: FontWeight.w800),),
             trailing: getStatusIcon(returnint(widget.form.status)),
+          ),
+          widget.form.added.isEmpty?SizedBox():ListTile(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (_)=>ListShow(list: widget.form.added)));
+            },
+            leading: Icon(Icons.shopping_cart),
+            trailing: Icon(Icons.arrow_forward_rounded),
+            title: Text("Added ${widget.form.added.length} Extra Services",style: TextStyle(fontWeight: FontWeight.w800),),
           ),
           ListTile(
             leading: CircleAvatar(

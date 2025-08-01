@@ -1,3 +1,19 @@
+buildscript {
+    val kotlin_version by extra("1.9.0")
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        // FlutterFire
+        classpath("com.google.gms:google-services:4.3.15")
+        classpath("com.android.tools.build:gradle:8.6.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -5,17 +21,15 @@ allprojects {
     }
 }
 
-val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
-rootProject.layout.buildDirectory.value(newBuildDir)
+// Set custom root build directory
+rootProject.buildDir = file("../build")
 
 subprojects {
-    val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
-    project.layout.buildDirectory.value(newSubprojectBuildDir)
-}
-subprojects {
-    project.evaluationDependsOn(":app")
+    buildDir = file("${rootProject.buildDir}/${name}")
+    evaluationDependsOn(":app")
 }
 
+// Clean task
 tasks.register<Delete>("clean") {
-    delete(rootProject.layout.buildDirectory)
+    delete(rootProject.buildDir)
 }

@@ -45,7 +45,6 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
         emit(SplashUnauthenticated());
       } else {
         final doc = await _firestore.collection("Users").doc(user.uid).get();
-
         if (doc.exists) {
           AppSession.currentUser = UserModel.fromJson(doc.data()!);
           emit(SplashAuthenticated());

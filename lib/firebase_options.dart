@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBsQKiR7xaovyw4dzME6fNj_9Nk256TXb8',
-    appId: '1:227976012490:android:dc1b6d4f32c90eabc40a33',
+    appId: '1:227976012490:android:86f856af964e3531c40a33',
     messagingSenderId: '227976012490',
     projectId: 'iskar-home-managment',
     storageBucket: 'iskar-home-managment.firebasestorage.app',
@@ -59,10 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC1OerkjsTxq_mbI99JuMfW9q22n_zKM8I',
-    appId: '1:227976012490:ios:6717f43d485adaa2c40a33',
+    appId: '1:227976012490:ios:85c74910a52cf945c40a33',
     messagingSenderId: '227976012490',
     projectId: 'iskar-home-managment',
     storageBucket: 'iskar-home-managment.firebasestorage.app',
-    iosBundleId: 'com.starwish.iskar',
+    iosBundleId: 'com.starwish.fixnest',
   );
+
 }

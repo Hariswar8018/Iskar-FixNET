@@ -1,4 +1,19 @@
 import 'dart:async';
+import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
+import 'package:awesome_bottom_bar/tab_item.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:iskar/main_navigations/profile.dart';
+import 'package:iskar/main_navigations/services.dart';
+import 'package:provider/provider.dart';
+
+import '../admin/main_pages/navigation.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,10 +32,17 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler); // ✅ only once
   runApp(
       const MyApp()
   );
 }
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(); // required
+  print('Handling a background message: ${message.messageId}');
+}
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

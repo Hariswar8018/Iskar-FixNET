@@ -16,13 +16,20 @@ import '../model/usermodel.dart' show UserModel;
 
 class Step1 extends StatefulWidget {
 
-   Step1({super.key,});
-
+   Step1({super.key, this.phone="NA"});
+   String phone ;
   @override
   State<Step1> createState() => _Step1State();
 }
 
 class _Step1State extends State<Step1> {
+  bool phoneactivate=true;
+  void initState(){
+    if(widget.phone!="Na"){
+      phoneactivate=false;
+      phone.text=widget.phone;
+    }
+  }
 
   List l5 = [];
   String drinkk = " ", smoke = " ", goall = " ", gen = " " , looki = " ", pic = " ";
@@ -117,7 +124,7 @@ class _Step1State extends State<Step1> {
                   Name: name.text,
                   uid: h,
                   pic: pic,
-                  bio: bio.text, lastLogin: '', token: '', phone: '', dob: '',
+                  bio: bio.text, lastLogin: '', token: '', phone: phone.text, dob: '', byphone: !phoneactivate,
               );
               print("haan be");
               try{
@@ -186,7 +193,7 @@ class _Step1State extends State<Step1> {
           SizedBox(height : 7),
           t2("This will Private and only Orders notification will be issued"),
           SizedBox(height : 18),
-          sd1(phone, context, 10),
+          sd1(phone, context, 10,activate: !phoneactivate),
           SizedBox(height : 10),
           t1("Your Bio"),
           SizedBox(height : 7),
@@ -538,7 +545,7 @@ class _Step1State extends State<Step1> {
       ),
     );
   }
-  Widget sd1 (TextEditingController cg,  BuildContext context, int yu){
+  Widget sd1 (TextEditingController cg,  BuildContext context, int yu,{activate=false}){
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -551,7 +558,7 @@ class _Step1State extends State<Step1> {
             padding: const EdgeInsets.only( left :10, right : 18.0, top : 5, bottom: 5),
             child: Center(
               child: TextFormField(
-                controller: cg, maxLength: yu,
+                controller: cg, maxLength: yu,readOnly: activate,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
                   isDense: true,
